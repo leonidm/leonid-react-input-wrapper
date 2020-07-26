@@ -15,16 +15,18 @@ export class Input extends Component {
   handleChange(event) {
     const target = event.target;
     const newVal = this.isCheckType ? target.checked : target.value;
-    this.setState({ val: newVal });
-    console.log("Input: ", this.props.id, this.state);
-
-    setTimeout(() => {
-      const element = document.getElementById(target.id);
-      console.log("Input: ", this.props.id, {
-        value: element.value,
-        checked: element.checked
+    if (this.props.type === "radio") {
+      this.props.updateRadioGroupValue(newVal);
+    } else {
+      this.setState({ val: newVal }, function() {
+        console.log("Input component: ", this.props.id, this.state);
+        const element = document.getElementById(target.id);
+        console.log("Native element: ", this.props.id, {
+          value: element.value,
+          checked: element.checked
+        });
       });
-    }, 0); // we use setTimeout because value is not updated immediately
+    }
   }
 
   render() {
@@ -33,7 +35,19 @@ export class Input extends Component {
         type={this.props.type}
         id={this.props.id}
         name={this.props.name}
-        value={this.isCheckType ? this.props.val : this.state.val}
+        value={
+          this.props.type === "checkbox"
+            ? null
+            : this.props.type === "radio"
+            ? this.props.val
+            : this.state.val
+        }
+        checked={this.props.type === "checkbox" ? this.state.val : null}
+        defaultChecked={
+          this.props.type === "radio"
+            ? this.props.val === this.props.getRadioGroupValue()
+            : null
+        }
         onChange={event => this.handleChange(event)}
       />
     );

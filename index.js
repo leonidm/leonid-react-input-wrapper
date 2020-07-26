@@ -9,6 +9,7 @@ class App extends Component {
     super();
     this.state = {
       name: "React",
+      radioGroupValue: "2",
       inputs: [
         {
           type: "text",
@@ -23,25 +24,39 @@ class App extends Component {
         {
           type: "checkbox",
           id: "checkbox 1",
-          checked: true
+          val: true
         },
         {
           type: "radio",
           id: "radio 1",
           name: "aa",
           val: "1",
-          checked: false
+          updateRadioGroupValue: v => this.updateRadioGroupValue(v),
+          getRadioGroupValue: () => {
+            return this.getRadioGroupValue();
+          }
         },
         {
           type: "radio",
           id: "radio 2",
           name: "aa",
           val: "2",
-          checked: true
+          updateRadioGroupValue: v => this.updateRadioGroupValue(v),
+          getRadioGroupValue: () => {
+            return this.getRadioGroupValue();
+          }
         }
       ]
     };
     this.state.inputs.forEach(x => (x.ref = null));
+  }
+
+  getRadioGroupValue() {
+    return this.state.radioGroupValue;
+  }
+
+  updateRadioGroupValue(v) {
+    this.state.radioGroupValue = v;
   }
 
   printAllStatuses() {
@@ -56,9 +71,9 @@ class App extends Component {
     });
     console.log("REACT COMPONENTS STATES");
     this.state.inputs.forEach(inp => {
-        const component = inp.ref;
-        console.log(inp.id, component.state)
-      });
+      const component = inp.ref;
+      console.log(inp.id, component.state);
+    });
 
     //console.log('REACT CHILDREN', this.props.children);
     //this.props.children.forEach(c=>console.log(JSON.stringify(c)))
